@@ -7,6 +7,8 @@ public class playerController : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float rotateSpeed = 75f;
+    public GameObject circlePrefab;
+    public GameObject player;
  
     public bool GameOn = false;
 
@@ -33,16 +35,56 @@ public class playerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space))
         {
-            // 按住空格键，向上飞行
+
             Vector3 newPosition = transform.position + Vector3.up * Time.deltaTime * 10f;
             transform.position = new Vector3(transform.position.x, Mathf.Clamp(newPosition.y, 1f, Mathf.Infinity), transform.position.z);
         }
         else
         {
-            // 松开空格键，向下飞行
+
             Vector3 newPosition = transform.position + Vector3.down * Time.deltaTime * 3f;
             transform.position = new Vector3(transform.position.x, Mathf.Clamp(newPosition.y, 10f, Mathf.Infinity), transform.position.z);
         }
+        if (Input.GetKeyDown(KeyCode.E))
 
+        {
+            GameObject circle = Instantiate(circlePrefab, player.transform.position, Quaternion.identity);
+       
+            circle.transform.localScale = Vector3.zero;
+
+            // 开始协程来控制光圈的缩放效果
+            StartCoroutine(ScaleCircle(circle));
+        }
+
+        IEnumerator ScaleCircle(GameObject circle)
+        {
+            float scale = 0f;
+            float time = 0f;
+            while (scale < 6f)
+            {
+                // 在2秒内逐渐放大光圈
+                scale = Mathf.SmoothStep(0f, 6f, time / 2f);
+                circle.transform.localScale = new Vector3(scale, scale, 2f);
+
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            // 等待2秒
+           yield return new WaitForSeconds(2f);
+
+          //  time = 0f;
+            while (scale >= 6f)
+            {
+                // 在2秒内逐渐缩小光圈
+                time += Time.deltaTime;
+                circle.transform.localScale = new Vector3(scale, scale, 2f);
+                scale = Mathf.SmoothStep(6f, 0f, time / 2f);
+                yield return null;
+            }
+
+            Destroy(circle);
+
+        }
     }
 }
