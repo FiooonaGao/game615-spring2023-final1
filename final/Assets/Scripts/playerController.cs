@@ -9,7 +9,7 @@ public class playerController : MonoBehaviour
     public float rotateSpeed = 75f;
     public GameObject circlePrefab;
     public GameObject player;
- 
+    private GameObject circleInstance;
     public bool GameOn = false;
 
 
@@ -54,6 +54,12 @@ public class playerController : MonoBehaviour
 
             // 开始协程来控制光圈的缩放效果
             StartCoroutine(ScaleCircle(circle));
+            
+        }
+      
+        if (circleInstance != null)
+        {
+            circleInstance.transform.position = player.transform.position;
         }
 
         IEnumerator ScaleCircle(GameObject circle)
@@ -63,23 +69,26 @@ public class playerController : MonoBehaviour
             while (scale < 6f)
             {
                 // 在2秒内逐渐放大光圈
+                circleInstance = circle;
                 scale = Mathf.SmoothStep(0f, 6f, time / 2f);
-                circle.transform.localScale = new Vector3(scale, scale, 2f);
-
+                circle.transform.localScale = new Vector3(scale, scale, scale);
+               
                 time += Time.deltaTime;
+                circle.transform.position = player.transform.position;
                 yield return null;
             }
 
             // 等待2秒
-           yield return new WaitForSeconds(2f);
+           yield return new WaitForSeconds(0.5f);
 
-          //  time = 0f;
-            while (scale >= 6f)
+            time = 0f;
+            while (scale > 0f)
             {
                 // 在2秒内逐渐缩小光圈
-                time += Time.deltaTime;
-                circle.transform.localScale = new Vector3(scale, scale, 2f);
                 scale = Mathf.SmoothStep(6f, 0f, time / 2f);
+                circle.transform.localScale = new Vector3(scale, scale, scale);
+                circle.transform.position = player.transform.position;
+                time += Time.deltaTime;
                 yield return null;
             }
 
