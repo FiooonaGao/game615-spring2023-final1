@@ -9,6 +9,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject talkPlane;
     public TMP_Text talkText;
     public GameObject arrowIcon;
+    public Animator animator;
     public string[] dialogues = new string[]
     {
         "...", "1", "2", "3", "4",
@@ -30,6 +31,8 @@ public class DialogueManager : MonoBehaviour
     {
         if (keyInfo.activeSelf && Input.GetKeyDown(KeyCode.C))
         {
+            //keyInfo.SetActive(false);
+
             if (isTalking)
             {
                 currentDialogueIndex++;
@@ -51,6 +54,7 @@ public class DialogueManager : MonoBehaviour
                 arrowIcon.SetActive(true);
                 talkText.text = dialogues[currentDialogueIndex];
                 talkPlane.SetActive(true);
+                //animator.SetTrigger("Press C disappear");
 
             }
         }

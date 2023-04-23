@@ -5,10 +5,12 @@ using TMPro;
 
 public class FlyingTree : MonoBehaviour
 {
-    public GameObject KeyInfo;
-    public GameObject TalkPlane;
+    public GameObject keyInfo;
+    public GameObject talkPlane;
     public TMP_Text talkText;
     public GameObject arrowIcon;
+    public GameObject door;
+    public GameObject player;
     public string[] dialogues = new string[]
     {
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
@@ -16,40 +18,40 @@ public class FlyingTree : MonoBehaviour
 
     private int currentDialogueIndex = 0;
     private bool isTalking = false;
+    private bool isPlayerTalking = false; // 记录玩家是否正在对话
 
     void Start()
     {
-        KeyInfo.SetActive(false);
-        TalkPlane.SetActive(false);
+        keyInfo.SetActive(false);
+        talkPlane.SetActive(false);
         arrowIcon.SetActive(false);
         talkText.text = "......";
+        door.SetActive(false); // 禁用门
     }
 
     void Update()
     {
-        if (KeyInfo.activeSelf && Input.GetKeyDown(KeyCode.C))
+        if (isPlayerTalking && Input.GetKeyDown(KeyCode.C)) // 只有在玩家正在对话时检查 C 键
         {
-            if (isTalking)
+            currentDialogueIndex++;
+            if (currentDialogueIndex >= dialogues.Length)
             {
-                currentDialogueIndex++;
-                if (currentDialogueIndex >= dialogues.Length)
-                {
-                    currentDialogueIndex = 0;
-                    TalkPlane.SetActive(false);
-                    isTalking = false;
-                    arrowIcon.SetActive(false);
-                }
-                else
-                {
-                    talkText.text = dialogues[currentDialogueIndex];
-                }
+                currentDialogueIndex = 0;
+                talkPlane.SetActive(false);
+                isTalking = false;
+                arrowIcon.SetActive(false);
+                keyInfo.SetActive(false);
+
+
+                isPlayerTalking = false; // 玩家对话结束
+                door.SetActive(true);
+                // 让门出现在玩家前方
+                Vector3 doorPos = player.transform.position + player.transform.forward * 10.0f;
+                Instantiate(door, doorPos, Quaternion.identity);
             }
             else
             {
-                isTalking = true;
-                arrowIcon.SetActive(true);
                 talkText.text = dialogues[currentDialogueIndex];
-                TalkPlane.SetActive(true);
             }
         }
     }
@@ -58,7 +60,7 @@ public class FlyingTree : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            KeyInfo.SetActive(true);
+            keyInfo.SetActive(true);
         }
     }
 
@@ -67,7 +69,21 @@ public class FlyingTree : MonoBehaviour
         currentDialogueIndex = 0;
         isTalking = false;
         arrowIcon.SetActive(false);
-        KeyInfo.SetActive(false);
-        TalkPlane.SetActive(false);
+        keyInfo.SetActive(false);
+        talkPlane.SetActive(false);
+        isPlayerTalking = false; // 玩家离开触发器时，取消对话
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.C))
+        {
+            isPlayerTalking = true; // 玩家按下 C 键时，开始对话
+            isTalking = true;
+            arrowIcon.SetActive(true);
+            talkText.text = dialogues[currentDialogueIndex];
+            talkPlane.SetActive(true);
+            keyInfo.SetActive(false); // 隐藏keyInfo
+        }
     }
 }
