@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class door : MonoBehaviour
 {
+    public GameObject sceneLoading;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            //sceneLoading.SetActive(true);
             SceneManager.LoadScene("scene 1");
         }
     }
