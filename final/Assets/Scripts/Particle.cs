@@ -3,42 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class Particle : MonoBehaviour
 {
     public Animator animator;
     public float moveSpeed = 5f;
-    public Slider energyBar;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Circle"))
         {
             // 获取光圈的 transform 组件
             StartCoroutine(FollowCircle(other.transform));
-           
-
-
             animator.SetTrigger("particle disappear");
-            // 增加能量条的值
-            energyBar.value += 0.1f;
 
-            // 如果能量条的值已经达到最大值，则禁用光圈的碰撞器
-            if (energyBar.value >= energyBar.maxValue)
-            {
-                other.GetComponent<Collider>().enabled = false;
-            }
+            // 增加能量条的值
+            other.GetComponentInParent<SliderController>().AddSliderValue(0.1f);
         }
     }
+
     private IEnumerator FollowCircle(Transform circleTransform)
     {
         float t = 0f;

@@ -5,12 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Particle
+  - Enemy
   - Circle
+  - HealthSlider
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - snow
   - Water
   - UI
   - 
