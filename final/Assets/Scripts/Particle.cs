@@ -18,7 +18,10 @@ public class Particle : MonoBehaviour
             animator.SetTrigger("particle disappear");
 
             // 增加能量条的值
-            other.GetComponentInParent<SliderController>().AddSliderValue(0.1f);
+            GameObject sliderObject = GameObject.FindGameObjectWithTag("Slider");
+            SliderController sliderController = sliderObject.GetComponent<SliderController>();
+            sliderController.AddSliderValue(0.1f);
+
         }
     }
 
