@@ -18,6 +18,9 @@ public class playerController : MonoBehaviour
     public Slider healthSlider; // 显示生命值的Slider
 
 
+    public bool isShielded = false;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -115,6 +118,20 @@ public class playerController : MonoBehaviour
             health -= 10; // 减少生命值
             // 更新Slider的值
             healthSlider.value = health;
+        }
+        else if (other.CompareTag("stone"))
+        {
+            isShielded = true;
+        }
+    }
+
+
+ 
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("stone"))
+        {
+            isShielded = false;
         }
     }
 }

@@ -9,6 +9,8 @@ TagManager:
   - Circle
   - HealthSlider
   - Slider
+  - light
+  - stone
   layers:
   - Default
   - TransparentFX
