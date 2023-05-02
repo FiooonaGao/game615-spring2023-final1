@@ -10,6 +10,7 @@ public class playerController : MonoBehaviour
     public float rotateSpeed = 75f;
     public GameObject circlePrefab;
     public GameObject player;
+    public GameObject doorPrefab;
     private GameObject circleInstance;
     public bool GameOn = false;
 
@@ -33,6 +34,7 @@ public class playerController : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         // 设置Slider的初始值
         healthSlider.value = health;
+        doorPrefab.SetActive(false);
     }
 
     // Update is called once per frame
@@ -122,6 +124,13 @@ public class playerController : MonoBehaviour
         else if (other.CompareTag("stone"))
         {
             isShielded = true;
+        }
+        else if (other.CompareTag("scene2Door"))
+        {
+            doorPrefab.SetActive(true);
+            // 让门出现在玩家前方
+            Vector3 doorPos = player.transform.position + player.transform.forward * 20.0f;
+            Instantiate(doorPrefab, doorPos, Quaternion.identity);
         }
     }
 

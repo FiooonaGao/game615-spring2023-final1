@@ -11,6 +11,8 @@ TagManager:
   - Slider
   - light
   - stone
+  - lampLight
+  - scene2Door
   layers:
   - Default
   - TransparentFX

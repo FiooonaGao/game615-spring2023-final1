@@ -36,6 +36,8 @@ public class LampLight : MonoBehaviour
         {
             PressText.enabled = false;
         }
+       
+
     }
 
 }
