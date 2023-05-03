@@ -13,6 +13,7 @@ TagManager:
   - stone
   - lampLight
   - scene2Door
+  - Pauseable
   layers:
   - Default
   - TransparentFX

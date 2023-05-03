@@ -9,6 +9,7 @@ public class SliderController : MonoBehaviour
     public GameObject lightPrefab;
     public GameObject player;
     private GameObject lightInstance;
+    
 
     void Start()
     {
@@ -38,6 +39,27 @@ public class SliderController : MonoBehaviour
 
             // 减少能量条
             AddSliderValue(-0.3f);
+        }
+
+        if (energySlider.value >= 0.5f && Input.GetKeyDown(KeyCode.R))
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<enemy>().enabled = false;
+               
+            }
+            StartCoroutine(ResumeEnemyMovement());
+            AddSliderValue(-0.5f);
+        }
+        IEnumerator ResumeEnemyMovement()
+        {
+            yield return new WaitForSeconds(10f);
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<enemy>().enabled = true;
+            }
         }
 
         if (lightInstance != null)
@@ -86,4 +108,5 @@ public class SliderController : MonoBehaviour
         Destroy(light);
     }
 }
+
 
