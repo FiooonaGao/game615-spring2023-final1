@@ -6,7 +6,7 @@ public class Wind : MonoBehaviour
 {
     private float windForce = 0.1f; // 风的力量
     private float windDuration = 5f; // 风持续时间
-    private float windCooldown = 10f; // 风冷却时间
+    private float windCooldown = 5f; // 风冷却时间
     private float windTimer = 0f; // 风计时器
     private bool isWindActive = false; // 风是否处于激活状态
 
@@ -52,7 +52,7 @@ public class Wind : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
         // 如果玩家进入风区域，将其向后吹
-        if (other.CompareTag("Player") && !other.GetComponent<playerController>().isShielded)
+        if (other.CompareTag("Player") && !other.GetComponent<PlayerController4>().isShielded)
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
             playerRigidbody.AddForce(-transform.forward * windForce, ForceMode.Impulse);

@@ -11,7 +11,7 @@ public class Door1 : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //sceneLoading.SetActive(true);
-            SceneManager.LoadScene("scene 1.5");
+            SceneManager.LoadScene("3");
         }
     }
 

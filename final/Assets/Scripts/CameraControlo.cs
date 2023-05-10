@@ -5,6 +5,22 @@ using UnityEngine;
 
 public class CameraControlo : MonoBehaviour
 {
+
+    public GameObject player;
+    private void Start()
+    {
+        GetComponent<CameraControlo>().enabled = false;
+        player.GetComponent<PlayerControllerScene1>().enabled = false;
+        StartCoroutine(DisableScript(9f));
+    }
+
+    IEnumerator DisableScript(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GetComponent<CameraControlo>().enabled = true;
+        player.GetComponent<PlayerControllerScene1>().enabled = true;
+
+    }
     // This enumeration describes which directions this script should control
     [Flags]
     public enum RotationDirection
