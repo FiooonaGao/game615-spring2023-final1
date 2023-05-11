@@ -10,49 +10,32 @@ public class Wind : MonoBehaviour
     private float windTimer = 0f; // 风计时器
     private bool isWindActive = false; // 风是否处于激活状态
 
-    void Update()
+    void Start()
     {
-        if (!isWindActive) // 如果风没有激活，进入冷却状态
-        {
-            windTimer += Time.deltaTime;
-            if (windTimer >= windCooldown) // 如果冷却时间结束，开始激活风
-            {
-                StartCoroutine(WindCoroutine());
-            }
-        }
-        else // 如果风已经激活，进入激活状态
-        {
-            windTimer += Time.deltaTime;
-            if (windTimer >= windDuration) // 如果激活时间结束，停止风的激活
-            {
-                GetComponent<WindZone>().windMain = 0f;
-                isWindActive = false;
-                windTimer = 0f;
-            }
-        }
+        StartCoroutine(WindCycleCoroutine());
     }
 
-    // 发射风的协程
-    IEnumerator WindCoroutine()
+    IEnumerator WindCycleCoroutine()
     {
-        // 播放风声效果
-        GetComponent<AudioSource>().Play();
-        // 设置风的强度
-        GetComponent<WindZone>().windMain = windForce;
-        isWindActive = true;
-        // 等待风持续时间
-        yield return new WaitForSeconds(windDuration);
-        // 重置风的强度
-        GetComponent<WindZone>().windMain = 0f;
-        isWindActive = false;
-        windTimer = 0f;
-        yield return new WaitForSeconds(windCooldown - windDuration);
+        while (true)
+        {
+            yield return new WaitForSeconds(windCooldown); // 等待冷却时间
+
+            isWindActive = true;
+            GetComponent<WindZone>().windMain = windForce; // 激活风
+
+            yield return new WaitForSeconds(windDuration); // 等待风持续时间
+
+            isWindActive = false;
+            GetComponent<WindZone>().windMain = 0f; // 停止风
+
+            windTimer = 0f;
+        }
     }
 
     void OnTriggerStay(Collider other)
     {
-        // 如果玩家进入风区域，将其向后吹
-        if (other.CompareTag("Player") && !other.GetComponent<PlayerController4>().isShielded)
+        if (isWindActive && other.CompareTag("Player") && !other.GetComponent<PlayerController4>().isShielded)
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
             playerRigidbody.AddForce(-transform.forward * windForce, ForceMode.Impulse);

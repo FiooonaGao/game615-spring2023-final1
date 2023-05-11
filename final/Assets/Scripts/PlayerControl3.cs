@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class PlayerControl3 : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class PlayerControl3 : MonoBehaviour
     public float rotateSpeed = 75f;
     public GameObject circlePrefab;
     public GameObject player;
-    public GameObject doorPrefab;
+    public GameObject lampPrefab;
     private GameObject circleInstance;
     public bool GameOn = false;
 
@@ -16,15 +17,15 @@ public class PlayerControl3 : MonoBehaviour
     public int maxHealth = 100; // 玩家最大生命值
     public Slider healthSlider; // 显示生命值的Slider
 
+    public GameObject restartButton;
+    public Animator dieAnimator;
 
-    public bool isShielded = false;
-
-
-
-    // Start is called before the first frame update
+ // Start is called before the first frame update
     void Start()
     {
         GameOn = true;
+    
+       // dieAnimator = GameObject. Find("die").GetComponent<Animator>();
 
         // 找到场景中的Slider对象
         healthSlider = GameObject.FindGameObjectWithTag("HealthSlider").GetComponent<Slider>();
@@ -32,12 +33,21 @@ public class PlayerControl3 : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         // 设置Slider的初始值
         healthSlider.value = health;
-        doorPrefab.SetActive(false);
+        lampPrefab.SetActive(false);
+
+        restartButton.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(health <=0)
+        {
+            restartButton.SetActive(true);
+           dieAnimator.SetTrigger ("dieFade");
+
+        }
+
         float hAxis = Input.GetAxis("Horizontal");
         float vAxis = Input.GetAxis("Vertical");
 
@@ -119,26 +129,15 @@ public class PlayerControl3 : MonoBehaviour
             // 更新Slider的值
             healthSlider.value = health;
         }
-        else if (other.CompareTag("stone"))
+        else if (other.CompareTag("RealSnake"))
         {
-            isShielded = true;
+            health -= 100;
+            healthSlider.value = health;
         }
-        else if (other.CompareTag("scene2Door"))
-        {
-            doorPrefab.SetActive(true);
-            // 让门出现在玩家前方
-            Vector3 doorPos = player.transform.position + player.transform.forward * 20.0f;
-            Instantiate(doorPrefab, doorPos, Quaternion.identity);
-        }
+   
     }
-
-
-
-    void OnTriggerExit(Collider other)
+    public void RestartGame ()
     {
-        if (other.CompareTag("stone"))
-        {
-            isShielded = false;
-        }
+        SceneManager.LoadScene("3");
     }
 }

@@ -44,21 +44,35 @@ public class SliderController : MonoBehaviour
         if (energySlider.value >= 0.5f && Input.GetKeyDown(KeyCode.R))
         {
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject[] snake = GameObject.FindGameObjectsWithTag("RealSnake");
             foreach (GameObject enemy in enemies)
             {
-                enemy.GetComponent<enemy>().enabled = false;
-               
+                enemy.GetComponent<enemy>().enabled = false; 
+
+            }
+            foreach (GameObject Zsnake2 in snake)
+            {
+                Zsnake2 .GetComponent<Animation>().enabled = false;
+                Zsnake2.GetComponent<Znake>().enabled = false;
+
             }
             StartCoroutine(ResumeEnemyMovement());
             AddSliderValue(-0.5f);
         }
         IEnumerator ResumeEnemyMovement()
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(5f);
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject[] snake = GameObject.FindGameObjectsWithTag("RealSnake");
             foreach (GameObject enemy in enemies)
             {
                 enemy.GetComponent<enemy>().enabled = true;
+            }
+            foreach (GameObject Zsnake2 in snake)
+            {
+                Zsnake2.GetComponent<Animation>().enabled = true;
+                Zsnake2.GetComponent<Znake>().enabled = true;
+
             }
         }
 
