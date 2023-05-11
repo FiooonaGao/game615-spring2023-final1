@@ -38,7 +38,14 @@ public class Wind : MonoBehaviour
         if (isWindActive && other.CompareTag("Player") && !other.GetComponent<PlayerController4>().isShielded)
         {
             Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
-            playerRigidbody.AddForce(-transform.forward * windForce, ForceMode.Impulse);
+            if (GetComponent<WindZone>().windMain > 0f)
+            {
+                playerRigidbody.AddForce(-transform.forward * windForce, ForceMode.Impulse);
+            }
+            else
+            {
+                playerRigidbody.velocity = Vector3.zero; // 当风停止时，将玩家速度归零
+            }
         }
     }
 }

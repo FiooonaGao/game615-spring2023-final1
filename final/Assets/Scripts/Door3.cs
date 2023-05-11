@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Door3 : MonoBehaviour
 {
+    public Animator endAnimator;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //sceneLoading.SetActive(true);
-            SceneManager.LoadScene("4");
+            endAnimator.SetTrigger("real end");
         }
     }
 }

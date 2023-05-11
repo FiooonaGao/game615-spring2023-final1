@@ -11,7 +11,9 @@ public class Scene3Lamp : MonoBehaviour
     public GameObject player;
     public GameObject doorPrefab;
 
+    public Animator endAnimator;
 
+    public Animator textAnimator;
     private void Start()
     {
         doorPrefab.SetActive(false);
@@ -55,13 +57,9 @@ public class Scene3Lamp : MonoBehaviour
         // 如果所有灯都点亮了，设置场景的Skybox和环境
         if (allLightsAreOn)
         {
-            Debug.Log("所有的灯都点亮了");
-            // 开始协程加载 Skybox
-            doorPrefab.SetActive(true);
-            // 让门出现在玩家前方
-            Vector3 doorPos = player.transform.position + player.transform.forward * 20.0f;
-            Instantiate(doorPrefab, doorPos, Quaternion.identity);
-         
+            endAnimator.SetTrigger("real end");
+            textAnimator.SetTrigger("real2");
+
 
         }
         else

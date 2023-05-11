@@ -13,6 +13,8 @@ public class SecondLamp : MonoBehaviour
     public GameObject player;
     public GameObject whiteLightPrefab;
 
+    public AudioSource audioSource;
+
     public TextMeshProUGUI FollowText;
     private bool isSkyboxLoaded = false;
 
@@ -37,6 +39,8 @@ public class SecondLamp : MonoBehaviour
             // 显示 FollowText
             FollowText.enabled = true;
             GetComponent<Animator>().Play("Follow");
+
+            PlayMusic();
         }
         else
         {
@@ -64,40 +68,10 @@ public class SecondLamp : MonoBehaviour
         }
     }
 
-    IEnumerator WhiteLightEffect(GameObject whiteLightPrefab)
+
+    void PlayMusic()
     {
-        float duration = 3f; // 整个效果的持续时间
-        float maxSize = Screen.width * 2f; // 白光最大尺寸
-        float growTime = 2f; // 白光变大的时间
-        float shrinkTime = 1f; // 白光变小的时间
-
-        // 生成白光对象
-        GameObject whiteLight = Instantiate(whiteLightPrefab, player.transform.position, Quaternion.identity);
-
-        // 开始白光变大的动画
-        float startTime = Time.time;
-        float endTime = startTime + growTime;
-        while (Time.time < endTime)
-        {
-            float t = (Time.time - startTime) / growTime;
-            float size = Mathf.Lerp(0, maxSize, t);
-            whiteLight.transform.localScale = new Vector3(size, size, size);
-            yield return null;
-        }
-
-        // 开始白光变小的动画
-        startTime = Time.time;
-        endTime = startTime + shrinkTime;
-        while (Time.time < endTime)
-        {
-            float t = (Time.time - startTime) / shrinkTime;
-            float size = Mathf.Lerp(maxSize, 0, t);
-            whiteLight.transform.localScale = new Vector3(size, size, size);
-            yield return null;
-        }
-
-        // 销毁白光对象
-        Destroy(whiteLight);
+        audioSource.Play(); // 播放音乐
     }
 
     // 在 OnTriggerExit 方法中调用
@@ -129,7 +103,7 @@ public class SecondLamp : MonoBehaviour
             // 开始协程加载 Skybox
             StartCoroutine(LoadSkyboxCoroutine());
             isSkyboxLoaded = true;
-
+     
 
         }
         else
